@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+	namespace命名空间，作用就是对sql进行分类化管理，理解sql隔离
+注意：使用mapper代理方法开发，namespace有特殊重要的作用，namespace等于mapper接口地址
+-->
+<mapper namespace="com.mcy.springbootmybatis.mapper.UserMapper">
+    <!-- 查询所有-->
+    <select id="findAll" resultType="User">
+		select * from tb_user
+	</select>
+    <!-- 根据姓名查询-->
+    <select id="findByName" parameterType="User" resultType="User">
+		select * from tb_user where name=#{name}
+	</select>
+    <!-- 根据用户名模糊查询-->
+    <select id="findByUsernameLike" parameterType="User" resultType="User">
+		select * from tb_user where username like "%"#{username}"%"
+	</select>
+	<!-- 根据id查询-->
+	<select id="findById" parameterType="User" resultType="User">
+		select * from tb_user where id = #{id}
+	</select>
+    <!--多条件动态查询-->
+    <select id="find" parameterType="User" resultType="User">
+		select * from tb_user where 1=1
+        <if test="name != '' and name != null">
+            and name =#{name}
+        </if>
+        <if test="username != '' and username != null">
+            and username =#{username}
+        </if>
+	</select>
+    <!-- 分页查询所有-->
+    <select id="findByPageAll" parameterType="User" resultType="User">
+		select * from tb_user limit #{offset},#{limit}
+	</select>
+    <!-- 增加 -->
+    <insert id="addSave" parameterType="User">
+		insert into tb_user values(null, #{name}, #{username}, #{password})
+	</insert>
+    <!-- 修改 -->
+    <update id="update" parameterType="User">
+		update tb_user set name=#{name}, username=#{username}, password=#{password}
+		where id=#{id}
+	</update>
+</mapper>
